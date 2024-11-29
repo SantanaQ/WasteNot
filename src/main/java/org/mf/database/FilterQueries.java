@@ -43,24 +43,7 @@ public class FilterQueries {
                 Array categoriesArray = con.createArrayOf("VARCHAR", categories);
                 ps.setArray(2,categoriesArray);
                 ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    Recipe r = new RecipeBuilder()
-                            .withName(rs.getString("r_name"))
-                            .withDescription(rs.getString("description"))
-                            .withInstructions(rs.getString("instructions"))
-                            .withIngredients(getRecipeIngredients(rs.getInt("recipeid")))
-                            .withCategories(getRecipeCategories(rs.getInt("recipeid")))
-                            .withTags(getRecipeTags(rs.getInt("recipeid")))
-                            .withMinutes_prep(rs.getInt("preptime"))
-                            .withMinutes_cooking(rs.getInt("cookingtime"))
-                            .withServings(rs.getInt("servings"))
-                            .withCreator(rs.getString("creator"))
-                            .withImageName(rs.getString("image"))
-                            .withIngredientCount(rs.getInt("matching_ingredients"))
-                            .build();
-                    foundRecipes.add(r);
-                }
-                rs.close();
+                foundRecipes = getFromRS(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,7 +51,43 @@ public class FilterQueries {
         return foundRecipes;
     }
 
-    List<Recipe>
+    public List<Recipe> getByTag(String tag) {
+        List<Recipe> foundRecipes = new ArrayList<>();
+        try (Connection con = DBConnectionPool.getDataSource().getConnection()) {
+            String sql = "SELECT r.*\n" +
+                    "FROM recipe AS r\n" +
+                    "JOIN recipetag AS rt ON r.recipeid = rt.recipeid\n" +
+                    "JOIN tag as t ON rt.tagid = t.tagid\n" +
+                    "WHERE t.t_name = ?";
+            try(PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1,tag);
+                ResultSet rs = ps.executeQuery();
+                foundRecipes = getFromRS(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return foundRecipes;
+    }
+
+    public List<Recipe> getByCategory(String category) {
+        List<Recipe> foundRecipes = new ArrayList<>();
+        try (Connection con = DBConnectionPool.getDataSource().getConnection()) {
+            String sql = "SELECT r.*\n" +
+                    "FROM recipe AS r\n" +
+                    "JOIN recipecategory AS rc ON r.recipeid = rc.recipeid\n" +
+                    "JOIN category as c ON rc.categoryid = c.categoryid\n" +
+                    "WHERE c.c_name = ?";
+            try(PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1,category);
+                ResultSet rs = ps.executeQuery();
+                foundRecipes = getFromRS(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return foundRecipes;
+    }
 
     private List<Ingredient> getRecipeIngredients(int recipeId) {
         List<Ingredient> recipeIngredients = new ArrayList<>();
@@ -139,6 +158,29 @@ public class FilterQueries {
             e.printStackTrace();
         }
         return recipeTags;
+    }
+
+    private List<Recipe> getFromRS(ResultSet rs) throws SQLException {
+        List<Recipe> recipes = new ArrayList<>();
+        while (rs.next()) {
+            Recipe r = new RecipeBuilder()
+                    .withName(rs.getString("r_name"))
+                    .withDescription(rs.getString("description"))
+                    .withInstructions(rs.getString("instructions"))
+                    .withIngredients(getRecipeIngredients(rs.getInt("recipeid")))
+                    .withCategories(getRecipeCategories(rs.getInt("recipeid")))
+                    .withTags(getRecipeTags(rs.getInt("recipeid")))
+                    .withMinutes_prep(rs.getInt("preptime"))
+                    .withMinutes_cooking(rs.getInt("cookingtime"))
+                    .withServings(rs.getInt("servings"))
+                    .withCreator(rs.getString("creator"))
+                    .withImageName(rs.getString("image"))
+                    .withIngredientCount(rs.getInt("matching_ingredients"))
+                    .build();
+            recipes.add(r);
+        }
+        rs.close();
+        return recipes;
     }
 
 
