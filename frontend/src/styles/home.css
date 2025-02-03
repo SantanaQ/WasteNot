@@ -1,0 +1,39 @@
+.main-section {
+    width: 90%;
+    margin: auto;
+}
+
+.welcome_container {
+    margin-top: 100px;
+    background-color: var(--blue);
+    color: white;
+    height: 80px;
+    line-height: 20px;
+    text-align: center;
+    padding: 10px;
+    box-shadow: 1px 1px 5px var(--shadow-color)
+}
+
+.main-section-container {
+    margin-top: 25px;
+    height: 1800px;
+    box-shadow: 1px 1px 5px var(--shadow-color)
+}
+
+.main-section-content {
+    margin: auto;
+    width: 80%;
+}
+
+.about-container {
+    margin-top: 25px;
+    height: 75px;
+    padding-top: 25px;
+    border-bottom: 1px solid black;
+}
+
+.about-text-cpntainer {
+    color: #555555;
+    line-height: 26px;
+    word-break: break-all;
+}

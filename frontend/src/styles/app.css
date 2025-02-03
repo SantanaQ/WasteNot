@@ -1,7 +1,28 @@
 @import "navbar.css";
+@import "home.css";
+@import "font.css";
 
 :root {
-    --blue: #1786ea
+    --blue: #1786ea;
+    --shadow-color: #b8b8b8
+}
+
+
+
+h1 {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 50px;
+}
+
+h2 {
+    font-weight: 300;
+    font-size: 40px;
+}
+
+button {
+    font-family: "Roboto", serif;
+    font-weight: 300;
 }
 
 button:hover {
@@ -12,19 +33,19 @@ button:hover {
     margin: 6px;
     font-size: 16px;
     line-height: 1px;
-    font-weight: bold;
+
     padding: 20px;
     border-radius: 12px;
 }
 
 .standard-button:hover {
-    box-shadow: 0 0 6px #d1d1d1;
+    box-shadow: 0 0 6px var(--shadow-color);
 }
 
 .standard-button-plain {
     background: #fff;
     color: #000000;
-    text-shadow: 1px 2px 1px #d3d3d3;
+    //text-shadow: 1px 2px 1px #d3d3d3;
     border: 1px solid #e4e4e4;
 }
 

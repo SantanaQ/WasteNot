@@ -1,7 +1,8 @@
 import React from "react";
 import { Helmet } from 'react-helmet';
-import './styles/App.css';
+import './styles/app.css';
 import Navbar from './componets/navbar';
+import MainSection from './componets/mainSection';
 
 const title = "WasteNot"
 
@@ -12,6 +13,7 @@ function App() {
     </Helmet>
     <React.Fragment>
       <Navbar/>
+      <MainSection/>
     </React.Fragment>
   </>;
 }
